@@ -1,11 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#14b8a6" />
+    <meta name="description" content="CorrijaMuniz - Corretor de texto inteligente para WhatsApp usando OpenAI GPT" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="shortcut icon" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <title>CorrijaMuniz</title>
+    <style>
+      .offline-message {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #ff4d4f;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-family: 'Poppins', sans-serif;
+        z-index: 1000;
+      }
+      body.offline .offline-message {
+        display: block;
+      }
+    </style>
   </head>
   <body>
+    <noscript>Você precisa habilitar JavaScript para executar esta aplicação.</noscript>
     <div id="root"></div>
+    <div class="offline-message">Você está offline. Algumas funcionalidades podem não estar disponíveis.</div>
+    
+    <script>
+      // Check if user is offline
+      window.addEventListener('online', () => {
+        document.body.classList.remove('offline');
+      });
+      
+      window.addEventListener('offline', () => {
+        document.body.classList.add('offline');
+      });
+      
+      if (!navigator.onLine) {
+        document.body.classList.add('offline');
+      }
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
     <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>

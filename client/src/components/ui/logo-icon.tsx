@@ -1,5 +1,5 @@
 export const LogoIcon = () => (
-  <img src="/logo-glow.png" alt="CorrijaMuniz Logo" className="w-full h-full animate-float" />
+  <img src="/logo.png" alt="CorrijaMuniz Logo" className="w-full h-full animate-float" />
 );
 
 export const WhatsAppIcon = () => (
