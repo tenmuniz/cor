@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { DiffText } from "@/components/ui/diff-text";
+import { NeuCard } from "@/components/ui/neu-card";
+import { Button3d } from "@/components/ui/button-3d";
+import { PulseButton } from "@/components/ui/pulse-button";
+import { LogoIcon, WhatsAppIcon, EnhanceIcon, CheckIcon } from "@/components/ui/logo-icon";
 
 interface CorrectionResponse {
   correctedText: string;
+  enhancedText: string;
   explanations: string[];
 }
 
@@ -69,14 +71,14 @@ export default function Home() {
     correction.mutate(text);
   };
 
-  const handleCopyText = () => {
-    if (!correction.data?.correctedText) return;
+  const handleCopyText = (textToCopy: string) => {
+    if (!textToCopy) return;
     
-    navigator.clipboard.writeText(correction.data.correctedText)
+    navigator.clipboard.writeText(textToCopy)
       .then(() => {
         toast({
           title: "Texto copiado!",
-          description: "O texto corrigido foi copiado para a área de transferência.",
+          description: "O texto foi copiado para a área de transferência.",
         });
       })
       .catch((error) => {
@@ -89,126 +91,190 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen px-4 py-8 md:py-16 md:px-6 lg:px-8 max-w-3xl mx-auto bg-background text-foreground">
-      {/* Header */}
-      <header className="mb-6 md:mb-8">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10 text-primary">
-            <i className="fas fa-pen-fancy text-xl"></i>
+    <div className="min-h-screen bg-gradient-to-b from-background to-primary/5">
+      {/* Header with logo and title */}
+      <header className="pt-8 pb-4 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex flex-col items-center text-center mb-6">
+            <div className="text-primary mb-2 w-16 h-16">
+              <LogoIcon />
+            </div>
+            <h1 className="text-4xl font-bold text-gradient mb-1">CorrijaMuniz</h1>
+            <p className="text-muted-foreground text-sm md:text-base">
+              Cole seu texto do WhatsApp e receba correções e sugestões melhoradas do Muniz
+            </p>
           </div>
-          <h1 className="text-2xl font-bold">Corretor de Texto</h1>
         </div>
-        <p className="mt-2 text-muted-foreground text-sm md:text-base">
-          Digite seu texto abaixo e obtenha uma versão corrigida com IA.
-        </p>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1">
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="text-input" className="block mb-2 text-sm font-medium">
-              Texto Original
-            </label>
+      <main className="px-4 pb-16">
+        <div className="max-w-3xl mx-auto">
+          {/* Input Section */}
+          <NeuCard elevated className="p-6 mb-8 transform transition-all duration-300">
+            <div className="flex items-center gap-2 mb-3">
+              <WhatsAppIcon />
+              <h2 className="font-semibold">Seu texto do WhatsApp</h2>
+            </div>
+            
             <div className="relative">
               <Textarea 
-                id="text-input" 
                 value={text}
                 onChange={handleTextChange}
-                placeholder="Digite ou cole seu texto aqui para corrigir..."
-                className="min-h-[120px] resize-y text-sm md:text-base"
+                placeholder="Passa a correção..."
+                className="min-h-[120px] resize-y bg-white/90 backdrop-blur-md border-primary/10 rounded-xl shadow-inner focus:border-primary/30 focus:ring-primary/30 text-sm md:text-base"
                 rows={5}
               />
               <button 
-                className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" 
+                className="absolute right-3 top-3 text-red-400 hover:text-red-600 dark:hover:text-red-300" 
                 onClick={handleClearText}
                 aria-label="Limpar texto"
               >
-                <i className="fas fa-times-circle"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="m15 9-6 6"/>
+                  <path d="m9 9 6 6"/>
+                </svg>
               </button>
             </div>
+            
             <div className="flex justify-between mt-2">
               <span className="text-xs text-muted-foreground">{characterCount} caracteres</span>
               <button 
                 className="text-xs text-primary hover:text-primary-dark flex items-center gap-1"
                 onClick={handlePasteText}
               >
-                <i className="fas fa-paste"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                  <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z"/>
+                </svg>
                 <span>Colar</span>
               </button>
             </div>
-          </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 mt-6">
-            <Button 
-              className="flex-1 py-3 items-center justify-center gap-2"
-              onClick={handleCorrectText}
-              disabled={!text.trim() || correction.isPending}
-            >
-              <i className="fas fa-magic"></i>
-              <span>Corrigir Texto</span>
-            </Button>
-          </div>
-        </div>
+            <div className="mt-6">
+              <Button3d
+                className="w-full py-3 text-base font-medium"
+                onClick={handleCorrectText}
+                disabled={!text.trim() || correction.isPending}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                  <path d="M12 9v4"/>
+                  <path d="M12 17h.01"/>
+                </svg>
+                Corrigir Texto
+              </Button3d>
+            </div>
+          </NeuCard>
 
-        {/* Loading Indicator */}
-        {correction.isPending && (
-          <div className="mt-8">
-            <div className="p-4 rounded-lg border border-primary/30 bg-primary/5">
-              <div className="flex items-center gap-3">
+          {/* Loading Indicator */}
+          {correction.isPending && (
+            <div className="flex justify-center my-8">
+              <div className="p-4 flex items-center gap-3">
                 <div className="w-5 h-5 rounded-full bg-primary animate-pulse"></div>
-                <p className="text-muted-foreground">Analisando e corrigindo seu texto...</p>
+                <p className="text-muted-foreground animate-pulse">Analisando e aprimorando seu texto...</p>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Result Section */}
-        {correction.data && !correction.isPending && (
-          <div className="mt-8">
-            <div className="space-y-4">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label htmlFor="corrected-text" className="block text-sm font-medium">
-                    Texto Corrigido
-                  </label>
-                  <button 
-                    className="text-xs text-primary hover:text-primary-dark flex items-center gap-1"
-                    onClick={handleCopyText}
-                  >
-                    <i className="fas fa-copy"></i>
-                    <span>Copiar</span>
-                  </button>
-                </div>
-                <Card className="p-4 min-h-[120px] text-sm md:text-base overflow-auto">
-                  <div className="whitespace-pre-wrap">
-                    <DiffText originalText={text} correctedText={correction.data.correctedText} />
+          {/* Result Sections */}
+          {correction.data && !correction.isPending && (
+            <div className="space-y-8">
+              {/* Corrected Text Section */}
+              <div className="relative overflow-visible">
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 h-1 w-40 bg-gradient-to-r from-transparent via-primary/50 to-transparent rounded"></div>
+                <NeuCard elevated className="p-6 transform transition-all duration-300 rounded-2xl">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="text-primary">
+                        <CheckIcon />
+                      </div>
+                      <h2 className="font-semibold">Texto Corrigido</h2>
+                    </div>
+                    <PulseButton
+                      variant="success"
+                      size="sm"
+                      className="px-3 py-1.5 text-xs font-medium"
+                      onClick={() => handleCopyText(correction.data.correctedText)}
+                      pulseColor="rgba(16, 185, 129, 0.2)"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                      </svg>
+                      Copiar
+                    </PulseButton>
                   </div>
-                </Card>
+                  <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-primary/10 min-h-[80px]">
+                    <p className="text-sm md:text-base whitespace-pre-wrap">{correction.data.correctedText}</p>
+                  </div>
+                </NeuCard>
               </div>
 
-              {/* Explanations Section */}
-              <div className="mt-6">
-                <h3 className="text-sm font-medium mb-2">O que foi corrigido:</h3>
-                <Card className="p-4">
-                  <ul className="text-sm space-y-2 list-disc pl-5">
-                    {correction.data.explanations.map((explanation, index) => (
-                      <li key={index}>{explanation}</li>
-                    ))}
-                  </ul>
-                </Card>
+              {/* Enhanced Text Section */}
+              <div className="relative overflow-visible">
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 h-1 w-40 bg-gradient-to-r from-transparent via-accent/50 to-transparent rounded"></div>
+                <NeuCard elevated className="p-6 transform transition-all duration-300 rounded-2xl" border>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="text-accent">
+                        <EnhanceIcon />
+                      </div>
+                      <h2 className="font-semibold">Versão Aprimorada</h2>
+                    </div>
+                    <PulseButton
+                      variant="outline"
+                      size="sm"
+                      className="px-3 py-1.5 text-xs font-medium border-accent/30 text-accent hover:text-accent-foreground"
+                      onClick={() => handleCopyText(correction.data.enhancedText)}
+                      pulseColor="rgba(124, 58, 237, 0.2)"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                      </svg>
+                      Copiar
+                    </PulseButton>
+                  </div>
+                  <div className="bg-accent/5 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/10 min-h-[80px]">
+                    <p className="text-sm md:text-base whitespace-pre-wrap">{correction.data.enhancedText}</p>
+                  </div>
+                </NeuCard>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </main>
 
       {/* Footer */}
-      <footer className="mt-12 pt-4 border-t border-gray-200 dark:border-gray-800">
-        <p className="text-center text-xs text-muted-foreground">
-          © 2024 Corretor de Texto - Powered by OpenAI GPT
-        </p>
+      <footer className="px-4 py-6 border-t border-primary/10 bg-background/50 backdrop-blur-sm">
+        <div className="max-w-3xl mx-auto flex flex-col items-center">
+          <div className="flex gap-4 mb-3">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                <path d="M12 9v4"/>
+                <path d="M12 17h.01"/>
+              </svg>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4"/>
+                <path d="M12 8h.01"/>
+              </svg>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+              </svg>
+            </div>
+          </div>
+          <p className="text-center text-xs text-muted-foreground">
+            CorrijaMuniz © 2025 - Powered by OpenAI GPT
+          </p>
+        </div>
       </footer>
     </div>
   );
