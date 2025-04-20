@@ -17,17 +17,21 @@ export async function correctText(text: string): Promise<CorrectionResponse> {
       messages: [
         {
           role: "system",
-          content: `Você é um assistente especializado em correção de texto em português.
-          Analise o texto fornecido pelo usuário e corrija quaisquer erros de ortografia, gramática, 
-          pontuação ou estilo. Retorne o texto corrigido e uma lista de explicações sobre as correções feitas.
+          content: `Você é um assistente especializado em correção de texto em português chamado CorrijaMuniz.
+          Analise o texto fornecido pelo usuário e faça duas tarefas:
+          
+          1. Corrija quaisquer erros de ortografia, gramática, pontuação ou estilo no texto.
+          2. Crie uma versão aprimorada do texto original, com vocabulário mais refinado e estrutura melhorada,
+             substituindo palavras por sinônimos mais elaborados quando apropriado.
           
           Responda exclusivamente no seguinte formato JSON:
           {
-            "correctedText": "texto corrigido",
+            "correctedText": "texto corrigido mantendo a essência original",
+            "enhancedText": "versão aprimorada com sinônimos melhores e estrutura refinada",
             "explanations": ["explicação 1", "explicação 2", ...]
           }
           
-          Se o texto estiver perfeito, retorne o texto original e uma explicação indicando que não foram necessárias correções.`
+          Se o texto estiver perfeito gramaticalmente, ainda assim forneça uma versão enhancedText com sinônimos e estrutura aprimorados.`
         },
         {
           role: "user",
@@ -39,9 +43,10 @@ export async function correctText(text: string): Promise<CorrectionResponse> {
 
     const result = JSON.parse(response.choices[0].message.content || "{}");
     
-    // Validate with zod schema
+    // Validate with zod schema and include the enhanced text
     return correctionResponseSchema.parse({
       correctedText: result.correctedText || text,
+      enhancedText: result.enhancedText || result.correctedText || text,
       explanations: result.explanations || ["Não foi possível analisar o texto."]
     });
     

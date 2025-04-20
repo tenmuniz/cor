@@ -20,6 +20,7 @@ export type User = typeof users.$inferSelect;
 // Text correction schema
 export const correctionResponseSchema = z.object({
   correctedText: z.string(),
+  enhancedText: z.string(),
   explanations: z.array(z.string()),
 });
 
