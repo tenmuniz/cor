@@ -104,14 +104,11 @@ export default function Home() {
       <header className="pt-8 pb-4 px-4 relative">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col items-center text-center mb-6 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 -z-10 opacity-80 animate-pulse-slow">
-              <img src="/banner-image.png" alt="Banner" className="w-full h-full object-contain" />
+            <div className="mb-2 w-24 h-24 animate-pulse-slow glow-effect">
+              <LogoIcon className="text-[#2DD4BF]" />
             </div>
-            <div className="mb-2 w-24 h-24 relative z-10">
-              <LogoIcon />
-            </div>
-            <h1 className="text-4xl font-bold text-gradient mb-1 relative z-10">CorrijaMuniz</h1>
-            <p className="text-muted-foreground text-sm md:text-base relative z-10">
+            <h1 className="text-4xl font-bold text-[#2DD4BF] mb-3">CorrijaMuniz</h1>
+            <p className="text-muted-foreground text-sm md:text-base max-w-md">
               Cole seu texto do WhatsApp e receba correções e sugestões melhoradas do Muniz
             </p>
           </div>
