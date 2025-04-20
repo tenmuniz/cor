@@ -1,5 +1,33 @@
 export const LogoIcon = () => (
-  <img src="/logo.png" alt="CorrijaMuniz Logo" className="w-full h-full animate-float" />
+  <svg
+    width="100%"
+    height="100%"
+    viewBox="0 0 512 512"
+    className="animate-float"
+    fill="#14b8a6"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g>
+      <rect x="40" y="40" width="432" height="432" rx="80" fill="#14b8a6" />
+      <rect x="46" y="46" width="420" height="420" rx="74" fill="#14b8a6" stroke="#005e54" strokeWidth="12" />
+      <path 
+        d="M350 160 L260 320 L200 260 L150 310" 
+        stroke="#f8fafc" 
+        strokeWidth="28" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path 
+        d="M160 120 L360 120 L360 210" 
+        stroke="#f8fafc" 
+        strokeWidth="28" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </g>
+  </svg>
 );
 
 export const WhatsAppIcon = () => (
