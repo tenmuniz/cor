@@ -1,3 +1,4 @@
+
 export const LogoIcon = () => (
   <svg
     width="100%"
@@ -8,7 +9,7 @@ export const LogoIcon = () => (
   >
     <defs>
       <filter id="glow">
-        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+        <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
         <feMerge>
           <feMergeNode in="coloredBlur"/>
           <feMergeNode in="SourceGraphic"/>
@@ -21,7 +22,7 @@ export const LogoIcon = () => (
         fill="#14b8a6"
       />
       <path 
-        d="M260 240 l-60 -60 m0 120 l120 -120"
+        d="M200 200 l40 40 l80 -80"
         stroke="#f8fafc"
         strokeWidth="40"
         strokeLinecap="round"
