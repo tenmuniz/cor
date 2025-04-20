@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import * as diff from "diff";
+import diff from 'diff';
+import { cn } from '@/lib/utils';
 
 interface DiffTextProps {
   originalText: string;
@@ -7,21 +7,24 @@ interface DiffTextProps {
 }
 
 export function DiffText({ originalText, correctedText }: DiffTextProps) {
-  const differences = useMemo(() => {
-    const diffs = diff.diffWords(originalText, correctedText);
-    return diffs.map((part, index) => {
-      const color = part.added 
-        ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" 
-        : part.removed 
-          ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
-          : "";
-      return (
-        <span key={index} className={color}>
-          {part.value}
-        </span>
-      );
-    });
-  }, [originalText, correctedText]);
+  const differences = diff.diffWords(originalText, correctedText);
 
-  return <>{differences}</>;
+  return (
+    <div className="font-sans text-base leading-relaxed break-words">
+      {differences.map((part, index) => {
+        // Adicionar as classes CSS de acordo com o tipo de mudança
+        const classes = cn(
+          "transition-all",
+          part.added && "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 font-medium mx-0.5 px-0.5 rounded",
+          part.removed && "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 line-through mx-0.5 px-0.5 rounded"
+        );
+
+        return (
+          <span key={index} className={classes}>
+            {part.value}
+          </span>
+        );
+      })}
+    </div>
+  );
 }

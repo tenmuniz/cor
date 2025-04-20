@@ -15,8 +15,8 @@ createRoot(document.getElementById("root")!).render(
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
       <meta name="theme-color" content="#14b8a6" />
       <link rel="manifest" href="/manifest.json" />
-      <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-      <link rel="shortcut icon" type="image/png" href="/logo.png" />
+      <link rel="apple-touch-icon" href="/logo-icon.png" />
+      <link rel="shortcut icon" type="image/png" href="/logo-icon.png" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" />
     </Helmet>

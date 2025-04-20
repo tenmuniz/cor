@@ -4,52 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
     <meta name="theme-color" content="#14b8a6" />
-    <meta name="description" content="CorrijaMuniz - Corretor de texto inteligente para WhatsApp usando OpenAI GPT" />
+    <link rel="icon" type="image/png" href="/logo-icon.png" />
+    <link rel="apple-touch-icon" href="/logo-icon.png" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="shortcut icon" href="/logo.png" />
-    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-    <title>CorrijaMuniz</title>
-    <style>
-      .offline-message {
-        display: none;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: #ff4d4f;
-        color: white;
-        text-align: center;
-        padding: 10px;
-        font-family: 'Poppins', sans-serif;
-        z-index: 1000;
-      }
-      body.offline .offline-message {
-        display: block;
-      }
-    </style>
+    <title>CorrijaMuniz - Corretor de Texto Inteligente</title>
+    <meta name="description" content="Melhore seus textos instantaneamente com CorrijaMuniz - o corretor de texto inteligente com IA." />
   </head>
   <body>
-    <noscript>Você precisa habilitar JavaScript para executar esta aplicação.</noscript>
     <div id="root"></div>
-    <div class="offline-message">Você está offline. Algumas funcionalidades podem não estar disponíveis.</div>
-    
+    <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Check if user is offline
-      window.addEventListener('online', () => {
-        document.body.classList.remove('offline');
-      });
-      
-      window.addEventListener('offline', () => {
-        document.body.classList.add('offline');
-      });
-      
-      if (!navigator.onLine) {
-        document.body.classList.add('offline');
+      // Verifica se o navegador suporta serviceWorker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('Service Worker registrado com sucesso:', registration.scope);
+            })
+            .catch((error) => {
+              console.error('Erro ao registrar o Service Worker:', error);
+            });
+        });
       }
     </script>
-    
-    <script type="module" src="/src/main.tsx"></script>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
-    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
   </body>
 </html>
