@@ -1,4 +1,4 @@
-import diff from 'diff';
+import * as diff from 'diff';
 import { cn } from '@/lib/utils';
 
 interface DiffTextProps {
@@ -6,12 +6,18 @@ interface DiffTextProps {
   correctedText: string;
 }
 
+interface DiffPart {
+  value: string;
+  added?: boolean;
+  removed?: boolean;
+}
+
 export function DiffText({ originalText, correctedText }: DiffTextProps) {
   const differences = diff.diffWords(originalText, correctedText);
 
   return (
     <div className="font-sans text-base leading-relaxed break-words">
-      {differences.map((part, index) => {
+      {differences.map((part: DiffPart, index: number) => {
         // Adicionar as classes CSS de acordo com o tipo de mudança
         const classes = cn(
           "transition-all",

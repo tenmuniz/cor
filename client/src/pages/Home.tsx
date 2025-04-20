@@ -6,7 +6,15 @@ import { apiRequest } from "@/lib/queryClient";
 import { NeuCard } from "@/components/ui/neu-card";
 import { Button3d } from "@/components/ui/button-3d";
 import { PulseButton } from "@/components/ui/pulse-button";
-import { LogoIcon, WhatsAppIcon, EnhanceIcon, CheckIcon } from "@/components/ui/logo-icon";
+import { DiffText } from "@/components/ui/diff-text";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { 
+  LogoIcon, 
+  WhatsAppIcon, 
+  EnhanceIcon, 
+  CheckIcon 
+} from "@/components/ui/logo-icon";
+import { PencilIcon } from "@/components/ui/pencil-icon";
 
 interface CorrectionResponse {
   correctedText: string;
@@ -181,6 +189,38 @@ export default function Home() {
           {/* Result Sections */}
           {correction.data && !correction.isPending && (
             <div className="space-y-8">
+              {/* Corrected Text Section */}
+              {/* Comparison View (Diff) */}
+              <div className="relative overflow-visible">
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 h-1 w-40 bg-gradient-to-r from-transparent via-primary/50 to-transparent rounded"></div>
+                <NeuCard elevated className="p-6 transform transition-all duration-300 rounded-2xl">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="text-primary">
+                        <PencilIcon />
+                      </div>
+                      <h2 className="font-semibold">Comparação</h2>
+                    </div>
+                    <PulseButton
+                      variant="success"
+                      size="sm"
+                      className="px-3 py-1.5 text-xs font-medium"
+                      onClick={() => handleCopyText(correction.data.correctedText)}
+                      pulseColor="rgba(16, 185, 129, 0.2)"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                      </svg>
+                      Copiar Correto
+                    </PulseButton>
+                  </div>
+                  <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-primary/10">
+                    <DiffText originalText={text} correctedText={correction.data.correctedText} />
+                  </div>
+                </NeuCard>
+              </div>
+
               {/* Corrected Text Section */}
               <div className="relative overflow-visible">
                 <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 h-1 w-40 bg-gradient-to-r from-transparent via-primary/50 to-transparent rounded"></div>
