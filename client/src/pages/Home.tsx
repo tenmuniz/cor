@@ -96,7 +96,7 @@ export default function Home() {
       <header className="pt-8 pb-4 px-4">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col items-center text-center mb-6">
-            <div className="text-primary mb-2 w-16 h-16">
+            <div className="mb-2 w-24 h-24">
               <LogoIcon />
             </div>
             <h1 className="text-4xl font-bold text-gradient mb-1">CorrijaMuniz</h1>
